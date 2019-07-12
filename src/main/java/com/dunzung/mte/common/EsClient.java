@@ -5,73 +5,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.action.search.SearchRequestBuilder;
-import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
-import org.elasticsearch.common.util.CollectionUtils;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.MatchPhraseQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
- * Created by duanzj on 2018/11/12.
+ * Created by Wooola on 2018/11/12.
  */
 public class EsClient {
 
     public static TransportClient client;
-
-    public static long hitTotal(String index, String type) {
-        SearchResponse response = client.prepareSearch(index)
-                .setTypes(type)
-                .setQuery(QueryBuilders.wildcardQuery("pendingURL.keyword", Const.PEND_URL + "*"))
-               // .setQuery(QueryBuilders.termsQuery("pendingURL", Const.PEND_URL_0, Const.PEND_URL_1, Const.PEND_URL_2))
-                .execute().actionGet();
-        return response.getHits().totalHits;
-
-    }
-
-    public static List<Map<String, Object>> searchForList(String index, String type, Map<String, Object> queryMap, Integer size) {
-        SearchRequestBuilder responsebuilder = client.prepareSearch(index).setTypes(type);
-        QueryBuilder qb = QueryBuilders.boolQuery();
-        if (null != queryMap) {
-            for (String key : queryMap.keySet()) {
-                MatchPhraseQueryBuilder mpq1 = QueryBuilders.matchPhraseQuery(key, queryMap.get(key).toString());
-                ((BoolQueryBuilder) qb).must(mpq1);
-            }
-        }
-        if (null == size) {
-            size = 10000;
-        }
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-        sourceBuilder.query(qb);
-
-        SearchResponse myresponse = responsebuilder
-                .setFrom(0)
-                .setQuery(qb)
-                .setSize(size)
-                .setExplain(true)
-                .execute()
-                .actionGet();
-        SearchHits hits = myresponse.getHits();
-        List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
-        for (SearchHit hit : hits) {
-            listMap.add(hit.getSourceAsMap());
-        }
-        return listMap;
-    }
 
     /**
      * 数据添加，正定ID
@@ -113,20 +61,6 @@ public class EsClient {
         return indexresponse.isAcknowledged();
     }
 
-    /**
-     * 高亮结果集 特殊处理
-     *
-     * @param searchResponse
-     */
-    private static List<Map<String, Object>> setSearchResponse(SearchResponse searchResponse) {
-        List<Map<String, Object>> sourceList = new ArrayList<>();
-        for (SearchHit searchHit : searchResponse.getHits().getHits()) {
-            searchHit.getSourceAsMap().put("id", searchHit.getId());
-            sourceList.add(searchHit.getSourceAsMap());
-        }
-        return sourceList;
-    }
-
     public static String addDataInJSON(String jsonStr, String index, String type, String id, XContentType contentType) {
         if (null == contentType) {
             contentType = XContentType.JSON;
@@ -140,13 +74,6 @@ public class EsClient {
         return response.getId();
     }
 
-
-    //    Settings esSetting = Settings.builder()
-//            .put("cluster.name", "zhmh-xnj-es")
-//            .put("client.transport.sniff", true)//增加嗅探机制，找到ES集群
-//            .put("thread_pool.search.size", 5)//增加线程池个数，暂时设为5
-//            .build();
-//    String[] nodes = "10.236.9.154:9300,10.236.9.155:9300,10.236.9.156:9300".split(",");
     public synchronized static void initClient(Map<String, String> meta) {
         try {
             String cName = meta.get("cName");

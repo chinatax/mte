@@ -3,7 +3,7 @@ package com.dunzung.mte.common;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Created by duanzj on 2019/3/20.
+ * Created by Wooola on 2019/3/20.
  */
 public final class Const {
 
@@ -38,23 +38,5 @@ public final class Const {
         public static AtomicLong LD_P_TOTAL = new AtomicLong();
 
     }
-
-
-    // 增量5000
-    public static AtomicLong PEND_COUNTER = new AtomicLong();
-
-    /**
-     * pengdingURL=1完成
-     * pengdingURL=2 完成
-     */
-    public static final String PEND_URL = "0";
-
-    public static final String PEND_URL_0 = "0";
-
-    public static final String PEND_URL_1 = "1";
-
-    public static final String PEND_URL_2 = "2";
-
-    public static final boolean PEND_DB_ENABLE = false;
 
 }

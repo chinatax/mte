@@ -1,10 +1,9 @@
 package com.dunzung.mte.service;
 
 import com.dunzung.mte.common.Const;
-import com.dunzung.mte.common.EsClient;
 
 /**
- * Created by duanzj on 2019/3/20.
+ * Created by Wooola on 2019/3/20.
  */
 public class MonitorService {
 

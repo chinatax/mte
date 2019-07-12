@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by zhijund on 2019/4/30.
+ * Created by Wooola on 2019/4/30.
  */
 public class PendUtils {
     public static HistPendingEntity getHistPendingEntity(ResultSet rs) {
