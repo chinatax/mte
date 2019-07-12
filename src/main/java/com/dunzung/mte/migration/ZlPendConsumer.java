@@ -1,10 +1,9 @@
-package com.unicom.portal.datamigr.queue.zengl;
+package com.dunzung.mte.migration;
 
+import com.dunzung.mte.common.Const;
+import com.dunzung.mte.common.EsClient;
+import com.dunzung.mte.entity.HistPendingEntity;
 import com.google.gson.Gson;
-import com.unicom.portal.datamigr.common.EsClient;
-import com.unicom.portal.datamigr.common.MigrConst;
-import com.unicom.portal.datamigr.entity.HistPendingEntity;
-import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 
@@ -29,14 +28,14 @@ public class ZlPendConsumer implements Runnable {
         System.out.println(threadName + "::启动...");
         try {
             System.out.println("threadName::" + threadName + "::接收::" + lst.size());
-            if (CollectionUtils.isEmpty(lst)) {
+            if (lst.isEmpty()) {
                 return;
             }
             lst.forEach(v -> {
                 try {
                     String json = new Gson().toJson(v);
-                    EsClient.addDataInJSON(json, MigrConst.ES.HistPendDB_Index, MigrConst.ES.HistPendDB_type, v.getPendingId(), null);
-                    MigrConst.COUNTER.LD_P.incrementAndGet();
+                    EsClient.addDataInJSON(json, Const.ES.HistPendDB_Index, Const.ES.HistPendDB_type, v.getPendingId(), null);
+                    Const.COUNTER.LD_P.incrementAndGet();
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("err::PendingId::" + v.getPendingId());

@@ -1,4 +1,4 @@
-package com.unicom.portal.datamigr.common;
+package com.dunzung.mte.common;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -9,8 +9,8 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.common.util.CollectionUtils;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchPhraseQueryBuilder;
@@ -19,10 +19,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
-import org.springframework.util.CollectionUtils;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -39,8 +36,8 @@ public class EsClient {
     public static long hitTotal(String index, String type) {
         SearchResponse response = client.prepareSearch(index)
                 .setTypes(type)
-                .setQuery(QueryBuilders.wildcardQuery("pendingURL.keyword", MigrConst.PEND_URL + "*"))
-               // .setQuery(QueryBuilders.termsQuery("pendingURL", MigrConst.PEND_URL_0, MigrConst.PEND_URL_1, MigrConst.PEND_URL_2))
+                .setQuery(QueryBuilders.wildcardQuery("pendingURL.keyword", Const.PEND_URL + "*"))
+               // .setQuery(QueryBuilders.termsQuery("pendingURL", Const.PEND_URL_0, Const.PEND_URL_1, Const.PEND_URL_2))
                 .execute().actionGet();
         return response.getHits().totalHits;
 
@@ -49,7 +46,7 @@ public class EsClient {
     public static List<Map<String, Object>> searchForList(String index, String type, Map<String, Object> queryMap, Integer size) {
         SearchRequestBuilder responsebuilder = client.prepareSearch(index).setTypes(type);
         QueryBuilder qb = QueryBuilders.boolQuery();
-        if (!CollectionUtils.isEmpty(queryMap)) {
+        if (null != queryMap) {
             for (String key : queryMap.keySet()) {
                 MatchPhraseQueryBuilder mpq1 = QueryBuilders.matchPhraseQuery(key, queryMap.get(key).toString());
                 ((BoolQueryBuilder) qb).must(mpq1);

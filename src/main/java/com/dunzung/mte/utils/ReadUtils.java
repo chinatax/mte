@@ -1,6 +1,6 @@
-package com.unicom.portal.datamigr.common;
+package com.dunzung.mte.utils;
 
-import com.unicom.portal.datamigr.entity.HistReadingEntity;
+import com.dunzung.mte.entity.HistReadingEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.ResultSet;

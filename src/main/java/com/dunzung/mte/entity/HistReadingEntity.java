@@ -1,4 +1,4 @@
-package com.unicom.portal.datamigr.entity;
+package com.dunzung.mte.entity;
 import lombok.Data;
 
 /**

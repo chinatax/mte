@@ -1,24 +1,19 @@
-package com.unicom.portal.datamigr;
+package com.dunzung.mte;
 
+import com.dunzung.mte.common.Const;
+import com.dunzung.mte.migration.ZlReadProducer;
+import com.dunzung.mte.service.MonitorService;
 import com.google.gson.Gson;
-import com.unicom.portal.datamigr.common.EsClient;
-import com.unicom.portal.datamigr.common.MigrConst;
-import com.unicom.portal.datamigr.queue.lingdao.*;
-import com.unicom.portal.datamigr.queue.url.PendUrlConsumer;
-import com.unicom.portal.datamigr.queue.url.PendUrlProducer;
-import com.unicom.portal.datamigr.queue.zengl.ZlPendProducer;
-import com.unicom.portal.datamigr.queue.zengl.ZlReadProducer;
-import com.unicom.portal.datamigr.service.*;
+import com.dunzung.mte.common.EsClient;
+import com.dunzung.mte.migration.ZlPendProducer;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class MigrMain {
+public class MteMain {
 
     public static void main(String[] args) throws ClassNotFoundException {
         if (args.length <= 0) {
@@ -38,10 +33,10 @@ public class MigrMain {
         EsClient.initClient(meta);
         try {
             String pendCount = args[5];
-            MigrConst.TBL.TBL_PEND_COUNT = Integer.parseInt(pendCount);
+            Const.TBL.TBL_PEND_COUNT = Integer.parseInt(pendCount);
             String readCount = args[6];
-            MigrConst.TBL.TBL_READ_COUNT = Integer.parseInt(readCount);
-            if (MigrConst.TBL.TBL_PEND_COUNT <= 0 || MigrConst.TBL.TBL_READ_COUNT <= 0) {
+            Const.TBL.TBL_READ_COUNT = Integer.parseInt(readCount);
+            if (Const.TBL.TBL_PEND_COUNT <= 0 || Const.TBL.TBL_READ_COUNT <= 0) {
                 System.out.println("err::TBL_PEND_COUNT::" + pendCount + "::TBL_READ_COUNT::" + readCount);
                 return;
             }
@@ -50,8 +45,7 @@ public class MigrMain {
             System.exit(0);
         }
 
-        String driver = "com.mysql.jdbc.Driver";
-        Class.forName(driver);
+        Class.forName("com.mysql.jdbc.Driver");
         String url = meta.get("url");
         String user = meta.get("user");
         String password = meta.get("password");

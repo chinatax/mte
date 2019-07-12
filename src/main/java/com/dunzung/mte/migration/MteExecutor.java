@@ -1,4 +1,4 @@
-package com.unicom.portal.datamigr.queue;
+package com.dunzung.mte.migration;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by duanzj on 2019/5/5.
  */
-public class MigrExecutor {
+public class MteExecutor {
 
     private static int THREADS = 21;
 

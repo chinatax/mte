@@ -1,13 +1,11 @@
-package com.unicom.portal.datamigr.common;
+package com.dunzung.mte.common;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by duanzj on 2019/3/20.
  */
-public final class MigrConst {
+public final class Const {
 
     public static final class ES {
 
