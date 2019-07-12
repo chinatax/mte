@@ -1,0 +1,23 @@
+{
+  "query": {
+    "bool": {
+      "must": {
+        "term": {
+          "pendingUserID": "gd074"
+        }
+      },
+      "should": [
+        {
+          "term": {
+            "pendingType": "gongwen"
+          }
+        },
+        {
+          "term": {
+            "pendingNote": "gd074"
+          }
+        }
+      ]
+    }
+  }
+}
