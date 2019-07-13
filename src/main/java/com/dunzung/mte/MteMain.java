@@ -2,7 +2,7 @@ package com.dunzung.mte;
 
 import com.dunzung.mte.common.Const;
 import com.dunzung.mte.migration.ZlReadProducer;
-import com.dunzung.mte.service.MonitorService;
+import com.dunzung.mte.migration.Monitor;
 import com.google.gson.Gson;
 import com.dunzung.mte.common.EsClient;
 import com.dunzung.mte.migration.ZlPendProducer;
@@ -33,8 +33,10 @@ public class MteMain {
         EsClient.initClient(meta);
         try {
             String pendCount = args[5];
+            // 已办表总数-分表
             Const.TBL.TBL_PEND_COUNT = Integer.parseInt(pendCount);
             String readCount = args[6];
+            // 已阅表总数-分表
             Const.TBL.TBL_READ_COUNT = Integer.parseInt(readCount);
             if (Const.TBL.TBL_PEND_COUNT <= 0 || Const.TBL.TBL_READ_COUNT <= 0) {
                 System.out.println("err::TBL_PEND_COUNT::" + pendCount + "::TBL_READ_COUNT::" + readCount);
@@ -60,7 +62,7 @@ public class MteMain {
             System.exit(0);
         }
 
-        MonitorService monitorService = new MonitorService();
+        Monitor monitorService = new Monitor();
         monitorService.monitorToES();
 
         Thread pendProducerThread = new Thread(new ZlPendProducer(conn, "ZlPendProducer"));

@@ -1,11 +1,11 @@
-package com.dunzung.mte.service;
+package com.dunzung.mte.migration;
 
 import com.dunzung.mte.common.Const;
 
 /**
  * Created by Wooola on 2019/3/20.
  */
-public class MonitorService {
+public class Monitor {
 
     private long ldPrevPendCount = 0;
 

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 已阅数据生产者线程
+ *
  * Created by Wooola on 2019/4/30.
  */
 public class ZlReadProducer implements Runnable {
