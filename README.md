@@ -1,15 +1,15 @@
 
-#背景
+# 背景
 近期接到一个任务，需要改造现有从mysql往Elasticsearch导入数据MTE(mysqlToEs)小工具，由于之前采用单线程导入，千亿数据需要两周左右的时间才能导入完成，导入效率非常低。所以楼主花了3天的时间，利用java线程池框架Executors中的FixedThreadPool线程池重写了MTE导入工具，单台服务器导入效率提高十几倍（合理调整线程数据，效率更高）。
 
-#关键技术栈
+# 关键技术栈
 - Elasticsearch
 - jdbc
 - ExecutorService\Thread
 - sql
 
-#工具说明
-maven依赖
+# 工具说明
+**maven依赖**
 ```
 <dependency>
  <groupId>mysql</groupId>
@@ -38,7 +38,7 @@ maven依赖
 </dependency>
 ```
 
-java线程池设置
+**java线程池设置**
 
 默认线程池大小为21个，可调整。其中POR为处理流程已办数据线程池，ROR为处理流程已阅数据线程池。
 
@@ -86,7 +86,7 @@ public class ZlReadProducer implements Runnable {
  ...已阅生产者处理逻辑同已办生产者
 }
 ```
-定义已办消费者线程/已阅生产者线程：ZlPendConsumer/ZlReadConsumer
+**定义已办消费者线程/已阅生产者线程：ZlPendConsumer/ZlReadConsumer**
 ```
 public class ZlPendConsumer implements Runnable {
  private String threadName;
@@ -114,7 +114,7 @@ public class ZlReadConsumer implements Runnable {
  //已阅消费者处理逻辑同已办消费者
 }
 ```
-定义导入Elasticsearch数据监控线程：Monitor
+**定义导入Elasticsearch数据监控线程：Monitor**
 
 监控线程-Monitor为了计算每分钟导入Elasticsearch的数据总条数，利用监控线程，可以调整线程池的线程数的大小，以便利用多线程更快速的导入数据。
 ```
@@ -153,7 +153,7 @@ public void monitorToES() {
  }).start();
 }
 ```
-初始化Elasticsearch：EsClient
+**初始化Elasticsearch：EsClient**
 ```
 String cName = meta.get("cName");//es集群名字
 String esNodes = meta.get("esNodes");//es集群ip节点
@@ -171,11 +171,11 @@ for (String node : nodes) {
  }
 }
 ```
-初始化数据库连接
+**初始化数据库连接**
 ```
 conn = DriverManager.getConnection(url, user, password);
 ```
-启动参数
+**启动参数**
 ```
 nohup java -jar mte.jar ES-Cluster2019 192.168.1.10:9300,192.168.1.11:9300,192.168.1.12:9300 root 123456! jdbc:mysql://192.168.1.13
 :3306/mte 130 130 >> ./mte.log 2>&1 &
@@ -186,7 +186,7 @@ ES-Cluster2019 为Elasticsearch集群名字
 192.168.1.10:9300,192.168.1.11:9300,192.168.1.12:9300为es的节点IP
 130 130为已办已阅分表的数据
 
-程序入口：MteMain
+**程序入口：MteMain**
 ```
 // 监控线程
 Monitor monitorService = new Monitor();
